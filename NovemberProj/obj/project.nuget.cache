@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "tTTfFHyjYnd4mRxXmNibH4HqKmEA22l/jBtUT7jlx/WbTFMZdYqxVhHB2cZ3ECFA66AxyQL9NQSnesbSsThbUg==",
+  "success": true,
+  "projectFilePath": "D:\\NovemberProjTest\\NovemberProj\\NovemberProj.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\emma.jerlin\\.nuget\\packages\\raylib-cs\\3.5.0\\raylib-cs.3.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}
