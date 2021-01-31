@@ -13,8 +13,10 @@ namespace NovemberProjekt
             int money = 200;
             int totalBooks = 0; //total books ska inte minska när man säljer en bok - det är hur många man haft någonsin
             bool locked = true;
+            int bookCounter = 0;
 
             var books = new List<Book>();
+            var antiqueStorage = new List<Book>();
 
             Game g1 = new Game();
 
@@ -122,20 +124,29 @@ namespace NovemberProjekt
 
                             Console.WriteLine("You have dropped off ");
 
-                            for (int i = g1.inventory.Count - 1; i > -1; i--)
+                            for (int i = bookCounter -1; i > -1; i--)
                             {
-                                Console.WriteLine(g1.inventory[i]);
-                                g1.inventory.Remove(books[i].name);
-                                g1.antiqueStorage.Add(books[i].name);
+                                Console.WriteLine(books[i].name);
+                                antiqueStorage.Add(books[i]);
+                                books.Remove(books[i]);
                             }
 
                             // Jag är medveten om att detta kodblock kommer bete sig konstigt om man har gett upp en bok tidigare, men detta är 
                             //bästa lösningen jag kan hitta just nu
 
-                            for (int i = g1.antiqueStorage.Count - 1; i > -1; i--)
+                            for (int i = antiqueStorage.Count - 1; i > -1; i--)
                             {
-                                Console.WriteLine("Set a price to sell " + g1.antiqueStorage[i] + " for.");
-                                Console.ReadLine();
+                                Console.WriteLine("Set a price to sell " + antiqueStorage[i].name + " for.");
+                                string setPrice = Console.ReadLine();
+                                int outPrice;
+                                bool lyckad = int.TryParse(setPrice, out outPrice);
+                                antiqueStorage[i].priceToSell = outPrice;
+                            }
+                            Console.WriteLine("Here are all the books currently in your Antiquary, with the prices you set");
+                             for (int i = antiqueStorage.Count - 1; i > -1; i--)
+                            {
+                                Console.WriteLine(antiqueStorage[i].name + ", priced at: " + antiqueStorage[i].priceToSell + "$");
+                                
                             }
                         }//dropcheck y
                         else if (dropCheck == "n")
@@ -154,6 +165,8 @@ namespace NovemberProjekt
 
                         while (currentInventory < 3)
                         {
+                            bookCounter = books.Count; //Räknar hur många books som finns i listan. Denna variabel kommer stämma tills en new books skapas, och
+                            //vid imput y, och då kommer den kunna signalera på vilken plats den nya boken står i listan (första är 0.) Då kan man ta bort vid specifik plats också,genom att använda bookCounter inten
                             if (currentInventory > 0)
                             {
                                 Console.Clear();
@@ -181,25 +194,24 @@ namespace NovemberProjekt
                                 {
                                     Console.WriteLine("Here are your options:");
                                     Console.WriteLine(" [print info] to see the rarity level, price to buy, and cathegory of the book");
-                                    Console.WriteLine(" [buy] to buy the book, [leave it] or anything else to look at other books ");
+                                    Console.WriteLine(" [buy] to buy the book");
+                                    Console.WriteLine(" [leave it] look at other books, and leave this one");
                                     Console.WriteLine("");
                                     string chooseBook = Console.ReadLine();
 
                                     if (chooseBook == "print info")
                                     {
                                         Console.Clear();
-                                        books[1].PrintInfo();
+                                        books[bookCounter].PrintInfo();
                                     }  //print info
 
                                     else if (chooseBook == "buy")
                                     {
                                         Console.Clear();
                                         Console.WriteLine("You pay the second hand shop for the book, and put it in your bag");
-                                        if (totalBooks == 0)
-                                        {
-                                            money = money - books[1].priceToBuy;
-                                            g1.inventory.Add(books[1].name);
-                                        }//totalbooks ==0
+                                        
+                                            money = money - books[bookCounter].priceToBuy;
+                                            g1.inventory.Add(books[bookCounter].name);
 
                                         currentInventory++;
                                         totalBooks++;
@@ -213,21 +225,20 @@ namespace NovemberProjekt
                                         int confirmValid = 0;
                                         while (confirmValid == 0)
                                         {
-                                            Console.WriteLine("Do you want to leave this forever, or come back for it later? (Note, that if you say yes, you will never find this book again) [leave it] or [come back later]");
+                                            Console.WriteLine("Do you want to leave this forever? [y/n] (Note, that if you say yes, you will never find this book again)");
                                             string confirm = Console.ReadLine();
-                                            if (confirm == "leave it")
+                                            if (confirm == "y")
                                             {
                                                 confirmValid++;
                                                 Console.Clear();
-                                                totalBooks++;
+                                                books.RemoveAt(bookCounter);
                                                 Console.WriteLine("You leave the book. Soon, another collector walks  in and buys it. This particular copy is now unavailable");
-                                            }//leave it
-                                            else if (confirm == "come back later")
-                                            {
-                                                confirmValid++;
+                                            }
+                                            else if(confirm=="n"){
+
                                                 Console.Clear();
-                                                Console.WriteLine("You leave the book on it's shelf, noting to come back to it next time you're here");
-                                            }//come back later
+                                            }
+                                                
                                             else
                                             {
                                                 Console.Clear();

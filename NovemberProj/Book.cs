@@ -40,7 +40,6 @@ namespace NovemberProjekt
             Console.WriteLine(name);
             Console.WriteLine("Rarity level: " + rarity);
             Console.WriteLine("Category: " + category);
-            Console.WriteLine("Price: " + price);
             Console.WriteLine("Price: " + priceToBuy);
         }
         }
